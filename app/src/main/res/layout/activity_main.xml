@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,32 +8,37 @@
     tools:context=".LoginActivity">
 
     <!-- Logo -->
+
     <ImageView
         android:id="@+id/logoImageView"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/ic_app_logo"
+        android:layout_marginTop="24dp"
         android:contentDescription="App Logo"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/ic_app_logo"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="40dp"/>
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Correo -->
+    <!-- Teléfono -->
+
     <EditText
-        android:id="@+id/emailEditText"
+        android:id="@+id/loginPhoneEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Correo electrónico"
-        android:inputType="textEmailAddress"
-        android:drawableStart="@drawable/ic_email"
-        android:drawablePadding="8dp"
-        android:padding="12dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/rounded_edittext"
-        app:layout_constraintTop_toBottomOf="@id/logoImageView"
-        app:layout_constraintStart_toStartOf="parent"
+        android:drawableStart="@drawable/ic_phone"
+        android:drawablePadding="8dp"
+        android:hint="Número de Teléfono"
+        android:inputType="phone"
+        android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"/>
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logoImageView" />
+
 
     <!-- Layout para Contraseña con botón -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,32 +47,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/emailEditText">
-
-        <!-- Campo de Contraseña -->
-        <EditText
-            android:id="@+id/passwordEditText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/rounded_edittext"
-            android:drawableStart="@drawable/ic_lock"
-            android:drawablePadding="8dp"
-            android:hint="Contraseña"
-            android:inputType="textPassword"
-            android:padding="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/passwordVisibilityToggle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/loginPhoneEditText">
 
         <!-- Botón de visibilidad de contraseña -->
+
         <ImageButton
             android:id="@+id/passwordVisibilityToggle"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:scaleType="centerInside"
             android:src="@drawable/ic_visibility_off"
@@ -77,14 +66,33 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_launcher_foreground" />
+
+        <!-- Campo de Contraseña -->
+
+        <EditText
+            android:id="@+id/loginPasswordEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rounded_edittext"
+            android:drawableStart="@drawable/ic_lock"
+            android:drawablePadding="8dp"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            app:layout_constraintEnd_toStartOf="@+id/passwordVisibilityToggle"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Botón de Inicio de Sesión -->
+    <!-- Botón de Iniciar Sesión -->
+
     <Button
         android:id="@+id/loginButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
+        android:layout_marginTop="24dp"
         android:backgroundTint="@color/primary"
         android:text="Iniciar Sesión"
         android:textColor="@android:color/white"
@@ -92,9 +100,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
     <!-- Texto de Registro -->
-
-
 
     <TextView
         android:id="@+id/registerTextView"

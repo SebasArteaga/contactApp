@@ -1,48 +1,30 @@
 package com.example.contactapp
 
+// Importaciones necesarias
+import android.content.Context
 import android.content.Intent
-import android.media.Image
 import android.os.Bundle
 import android.text.InputType
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.android.volley.Request
-import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Desactivar modo oscuro (opcional)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val emailEditText = findViewById<EditText>(R.id.emailEditText)
-        val passwordEditText = findViewById<EditText>(R.id.passwordEditText)
+        // Referencias a los elementos de la interfaz
+        val phoneEditText = findViewById<EditText>(R.id.loginPhoneEditText)
+        val passwordEditText = findViewById<EditText>(R.id.loginPasswordEditText)
         val loginButton = findViewById<Button>(R.id.loginButton)
         val registerTextView = findViewById<TextView>(R.id.registerTextView)
-
-        loginButton.setOnClickListener {
-            val email = emailEditText.text.toString().trim()
-            val password = passwordEditText.text.toString().trim()
-
-            // Validación básica
-            if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
-            } else {
-                login(email, password)
-            }
-        }
-
-        registerTextView.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
-        }
 
         // Visibilidad de contraseña
         val passwordToggle = findViewById<ImageButton>(R.id.passwordVisibilityToggle)
@@ -59,39 +41,92 @@ class LoginActivity : AppCompatActivity() {
             }
             passwordEditText.setSelection(passwordEditText.text.length) // Mantiene el cursor al final
         }
+
+        // Actividad para regsitrarse
+        registerTextView.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Acción del botón de inicio de sesión
+        loginButton.setOnClickListener {
+            // Obtener datos ingresados
+            val phone = phoneEditText.text.toString()
+            val password = passwordEditText.text.toString()
+
+            // Validación básica
+            if (phone.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
+            } else {
+                login(phone, password)
+            }
+        }
     }
 
+    // Validar datos ingresados
+    private fun validateInput(phone: String, password: String): Boolean {
+        if (phone.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
+            return false
+        }
 
-    private fun login(email: String, password: String) {
+        if (phone.length != 10 || !phone.all { it.isDigit() }) {
+            Toast.makeText(this, "El número de teléfono debe tener exactamente 10 dígitos", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (password.length < 6) {
+            Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        return true
+    }
+
+    // Función para manejar el inicio de sesión
+    private fun login(phone: String, password: String) {
         val url = "https://nodejs-rest-api-75r4.onrender.com/login"
-        val queue = Volley.newRequestQueue(this)
 
-        val params = JSONObject()
-        params.put("email", email)
-        params.put("password", password)
+        // Crear JSON con los datos de inicio de sesión
+        val jsonBody = JSONObject()
+        jsonBody.put("phone", phone)
+        jsonBody.put("password", password)
 
-        val request = JsonObjectRequest(
-            Request.Method.POST, url, params,
+        // Crear solicitud HTTP POST
+        val request = object : StringRequest(Request.Method.POST, url,
             { response ->
-                try {
-                    // Verificar si la respuesta es exitosa
-                    val message = response.getString("message")
-                    if (message == "Inicio de sesión exitoso") {
-                        // Navegar a la actividad de contactos
-                        val intent = Intent(this, ContactsActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    } else {
-                        Toast.makeText(this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
-                    }
-                } catch (e: Exception) {
-                    Toast.makeText(this, "Error al procesar la respuesta del servidor", Toast.LENGTH_SHORT).show()
-                }
+                // Procesar respuesta exitosa
+                val responseJson = JSONObject(response)
+                val userId = responseJson.getInt("user_id") // Obtener el ID del usuario
+
+                // Guardar el ID del usuario en SharedPreferences
+                val sharedPreferences = getSharedPreferences("ContactAppPrefs", Context.MODE_PRIVATE)
+                sharedPreferences.edit().putInt("userId", userId).apply()
+
+                // Notificar éxito y redirigir a la actividad principal
+                Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, ContactsActivity::class.java)
+                startActivity(intent)
+                finish()
             },
             { error ->
-                Toast.makeText(this, "Error al iniciar sesión: ${error.message}", Toast.LENGTH_SHORT).show()
+                // Manejar errores
+                val errorMessage = error.networkResponse?.let {
+                    val errorData = String(it.data, Charsets.UTF_8)
+                    JSONObject(errorData).getString("error")
+                } ?: error.message ?: "Error del servidor"
+                Toast.makeText(this, "Error: $errorMessage", Toast.LENGTH_SHORT).show()
+            }) {
+            override fun getBody(): ByteArray {
+                return jsonBody.toString().toByteArray()
             }
-        )
-        queue.add(request)
+
+            override fun getBodyContentType(): String {
+                return "application/json; charset=utf-8"
+            }
+        }
+
+        // Agregar la solicitud a la cola de Volley
+        Volley.newRequestQueue(this).add(request)
     }
 }

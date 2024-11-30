@@ -52,23 +52,87 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/nameEditText" />
 
-    <!-- Teléfono -->
+    <!-- LinearLayout para Código de País y Teléfono -->
+
+    <!-- Código de Verificación -->
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerPasswordEditText">
+
+        <!-- Dropdown de Código de País -->
+        <Spinner
+            android:id="@+id/countryCodeSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp" />
+
+        <!-- Teléfono -->
+        <EditText
+            android:id="@+id/registerPhoneEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_edittext"
+            android:drawableStart="@drawable/ic_phone"
+            android:drawablePadding="8dp"
+            android:hint="Número de Teléfono"
+            android:inputType="phone"
+            android:padding="12dp" />
+    </LinearLayout>
+
+    <!-- Botón para enviar OTP -->
+
+    <!-- Botón para Validar Código -->
+    <!-- Contraseña -->
+
     <EditText
-        android:id="@+id/registerPhoneEditText"
+        android:id="@+id/verificationCodeEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/rounded_edittext"
-        android:drawableStart="@drawable/ic_phone"
-        android:drawablePadding="8dp"
-        android:hint="Número de Teléfono"
-        android:inputType="phone"
+        android:hint="Código de Verificación"
+        android:inputType="number"
         android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/registerPasswordEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-    <!-- Contraseña -->
+    <Button
+        android:id="@+id/sendOtpButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/primary"
+        android:text="Enviar código"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/verificationCodeEditText" />
+
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/primary"
+        android:text="Registrarse"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sendOtpButton" />
+
     <EditText
         android:id="@+id/registerPasswordEditText"
         android:layout_width="0dp"
@@ -88,20 +152,11 @@
 
 
     <!-- Botón de Registro -->
-    <Button
-        android:id="@+id/registerButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="@color/primary"
-        android:text="Registrarse"
-        android:textColor="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/registerPhoneEditText" />
-
 
     <!-- Botón de Visibilidad -->
+
+
+
     <ImageButton
         android:id="@+id/passwordVisibilityToggle"
         android:layout_width="32dp"
